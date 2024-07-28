@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #87CEFA, #ffffff); /* Blue gradient background */
+            background-attachment: fixed; /* Ensures the background does not repeat and stays fixed */
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background: white; /* Solid background for content area */
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative; /* Allows positioning of the "free" message */
+        }
+        h1 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .total {
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: right;
+        }
+        .free-message {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 1.5em;
+            color: #d1001c; /* Red color for emphasis */
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Checkout</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Quantity</th>
+                    <th>Price per Piece</th>
+                    <th>Total Price</th>
+                </tr>
+            </thead>
+            <tbody id="checkoutTableBody">
+                <!-- JavaScript will populate table rows here -->
+            </tbody>
+        </table>
+        <div class="total">
+            Total Amount: $<span id="checkoutTotalAmount">0.00</span>
+        </div>
+        <div class="free-message">
+            Yayyy! You Got It For FREE!!
+        </div>
+    </div>
+
+    <script>
+        // Function to populate checkout table
+        function populateCheckout() {
+            const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+            const checkoutTableBody = document.getElementById('checkoutTableBody');
+            let totalAmount = 0;
+
+            cartItems.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.name}</td>
+                    <td>${item.quantity}</td>
+                    <td>$${item.price.toFixed(2)}</td>
+                    <td>$${item.total.toFixed(2)}</td>
+                `;
+                checkoutTableBody.appendChild(row);
+                totalAmount += item.total;
+            });
+
+            document.getElementById('checkoutTotalAmount').textContent = totalAmount.toFixed(2);
+        }
+
+        // Initial call to populate checkout table
+        populateCheckout();
+    </script>
+</body>
+</html>
