@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doraemon Gadgets Store</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('https://via.placeholder.com/1920x1080?text=Background+Image') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(to bottom, #87CEFA, #ffffff); /* Sky blue gradient */
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .item-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        .item {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .item img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .item h2 {
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+        .item p {
+            margin: 0 0 10px;
+        }
+        .item .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .item .controls button {
+            padding: 5px 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .item .controls button:hover {
+            background: #0056b3;
+        }
+        .item .quantity {
+            font-size: 1.1em;
+        }
+        .total {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #d1001c; /* Doraemon's nose color */
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            font-size: 1.2em;
+            font-weight: bold;
+            color: white; /* White text color */
+        }
+    </style>
+</head>
+<body>
+    <div class="total">
+        Total Amount: $<span id="totalAmount">0.00</span>
+    </div>
+
+    <div class="container">
+        <h1>Buy Doraemon Gadgets That You Wish Existed</h1>
+        
+        <div class="item-grid" id="items">
+            <!-- JavaScript will populate items here -->
+        </div>
+    </div>
+
+    <script>
+        // Array of gadget items with their prices and image URLs
+        const gadgets = [
+            { name: "Anywhere Door", price: 99.99 * 1.20, image: "anywhere door 1x1.webp" },
+            { name: "Time Machine", price: 199.99 * 1.20, image: "Time Machine 1x1.png" },
+            { name: "Gadget Belt", price: 29.99 * 1.20, image: "GADGET BELT.jfif" },
+            { name: "Hoverboard", price: 79.99 * 1.20, image: "hoverboard.png" },
+            { name: "X-Ray Glasses", price: 49.99 * 1.20, image: "x ray glasses.webp" },
+            { name: "Miniature Kitchen", price: 89.99 * 1.20, image: "miniature kitchen.webp" },
+            { name: "Flying Fan", price: 39.99 * 1.20, image: "bamboo coppter.png" },
+            { name: "Magic Lamp", price: 59.99 * 1.20, image: "pic 14.png" },
+            { name: "Replicator", price: 149.99 * 1.20, image: "pic 11.png" },
+            { name: "Dream Camera", price: 109.99 * 1.20, image: "50.webp" },
+            { name: "Health Checker", price: 69.99 * 1.20, image: "pic 10.png" },
+            { name: "Instant Food Maker", price: 79.99 * 1.20, image: "ss.webp" },
+            { name: "Shape Shifter", price: 129.99 * 1.20, image: "mikuj.webp" },
+            { name: "Anti-Gravity Boots", price: 119.99 * 1.20, image: "sssa.jpg" },
+            { name: "Robot Helper", price: 199.99 * 1.20, image: "bha.jpeg" },
+            { name: "Space Travel Suit", price: 299.99 * 1.20, image: "Sd29b6dc984ee41469ed30e1429ad2810B-fococlipping-standard_421x421.webp" },
+            { name: "Digital Notebook", price: 89.99 * 1.20, image: "ss.jpg" },
+            { name: "Invisibility Cloak", price: 159.99 * 1.20, image: "Screenshot 2024-07-28 103418.png" },
+            { name: "Super Speed Shoes", price: 109.99 * 1.20, image: "images.jpeg" },
+            { name: "Instant Translator", price: 49.99 * 1.20, image: "hhas.webp" },
+        ];
+
+        // Function to update total amount
+        function updateTotal() {
+            const totalAmountElem = document.getElementById('totalAmount');
+            let totalAmount = 0;
+            document.querySelectorAll('.item').forEach(item => {
+                const price = parseFloat(item.getAttribute('data-price'));
+                const quantity = parseInt(item.querySelector('.quantity').textContent);
+                totalAmount += price * quantity;
+            });
+            totalAmountElem.textContent = totalAmount.toFixed(2);
+        }
+
+        // Function to create gadget items
+        function createGadgetItems() {
+            const itemsContainer = document.getElementById('items');
+            gadgets.forEach(gadget => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'item';
+                itemDiv.setAttribute('data-price', gadget.price);
+                
+                itemDiv.innerHTML = `
+                    <img src="${gadget.image}" alt="${gadget.name}">
+                    <h2>${gadget.name}</h2>
+                    <p>Price: $${gadget.price.toFixed(2)}</p>
+                    <div class="controls">
+                        <button onclick="changeQuantity(event, -1)">-</button>
+                        <span class="quantity">0</span>
+                        <button onclick="changeQuantity(event, 1)">+</button>
+                    </div>
+                `;
+                
+                itemsContainer.appendChild(itemDiv);
+            });
+        }
+
+        // Function to handle quantity change
+        function changeQuantity(event, delta) {
+            const itemDiv = event.target.closest('.item');
+            const quantityElem = itemDiv.querySelector('.quantity');
+            let currentQuantity = parseInt(quantityElem.textContent);
+            currentQuantity += delta;
+
+            if (currentQuantity < 0) currentQuantity = 0;
+            quantityElem.textContent = currentQuantity;
+            updateTotal();
+        }
+
+        // Initial call to populate items
+        createGadgetItems();
+    </script>
+    <div class="checkout-container" style="text-align: center; margin-top: 20px;">
+    <button id="checkoutButton" style="padding: 10px 20px; background: #d1001c; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1.2em;">
+        Checkout
+    </button>
+</div>
+
+<script>
+    // Function to handle checkout button click
+    document.getElementById('checkoutButton').addEventListener('click', () => {
+        const cartItems = [];
+        document.querySelectorAll('.item').forEach(item => {
+            const name = item.querySelector('h2').textContent;
+            const quantity = parseInt(item.querySelector('.quantity').textContent);
+            if (quantity > 0) {
+                const price = parseFloat(item.getAttribute('data-price'));
+                cartItems.push({ name, quantity, price, total: price * quantity });
+            }
+        });
+
+        // Store cartItems in localStorage and redirect to checkout page
+        localStorage.setItem('cartItems', JSON.stringify(cartItems));
+        window.location.href = 'checkout.html';
+    });
+</script>
+</body>
+</html>
